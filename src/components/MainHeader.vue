@@ -7,7 +7,7 @@ import MainBtn from "./MainBtn.vue";
     <div :class="[$style['header-content'], 'container']">
       <div :class="$style['header_left-group']">
         <div>
-          <span><a href="#/">Все заказы</a></span>
+          <span><a href="#/main-orders">Все заказы</a></span>
         </div>
         <div>
           <span><a href="#/main-add">Добавить заказ</a></span>

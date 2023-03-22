@@ -3,6 +3,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import MainTest from "../components/MainTest.vue";
 import MainAdd from "../components/MainAdd.vue";
 import MainAuthorization from "../components/MainAuthorization.vue";
+import MainOrders from "../components/MainOrders.vue";
 
 export default createRouter({
   history: createWebHashHistory(),
@@ -10,10 +11,16 @@ export default createRouter({
     {
       path: "/",
       component: MainTest,
-    },
-    {
-      path: "/main-add",
-      component: MainAdd,
+      children: [
+        {
+          path: "/main-add",
+          component: MainAdd,
+        },
+        {
+          path: "/main-orders",
+          component: MainOrders,
+        },
+      ],
     },
     {
       path: "/auth",

@@ -1,9 +1,4 @@
-<script lang="ts" setup>
-import MainHeader from "./components/MainHeader.vue";
-</script>
-
 <template>
-  <MainHeader />
   <div :class="$style['main-container']">
     <router-view></router-view>
   </div>
