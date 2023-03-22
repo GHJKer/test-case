@@ -1,0 +1,9 @@
+:root {
+  --color_black: 0, 0, 0; /* #000 */
+  --color_white: 255, 255, 255; /* #FFF */
+  --color_gray-dark: 217, 217, 217; /* #D9D9D9 dark */
+  --color_gray: 226, 225, 225; /* #E2E1E1 middle */
+  --color_gray-light: 245, 245, 245; /* #F5F5F5 light */
+  --color_disabled-dark: 191, 191, 191; /* #BFBFBF */
+  --color_blue: 22, 89, 150; /* #165996 */
+}
