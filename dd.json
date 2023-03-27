@@ -1,0 +1,50 @@
+{
+  "events": [
+    {
+      "id": 952,
+      "name": "Denis",
+      "address": "Lenina 9",
+      "date": "27 марта 2023 г.",
+      "status": "Новый",
+      "comment": "Важное сообщение для важной шишки"
+    },
+    {
+      "id": 536,
+      "name": "Denis",
+      "address": "Lenina 9",
+      "date": "27 марта 2023 г.",
+      "status": "Новый",
+      "comment": "ddas akkasn nndmas"
+    },
+    {
+      "id": 103,
+      "name": "Иван Иванов",
+      "address": "Мольберта 92",
+      "date": "27 марта 2023 г.",
+      "status": "Выполнен",
+      "comment": "Хрупкое. осторожно"
+    },
+    {
+      "id": 793,
+      "name": "Иван Иванов",
+      "address": "Колодкина 19",
+      "date": "27 марта 2023 г.",
+      "status": "Выполнен",
+      "comment": "Упаковать"
+    }
+  ],
+  "users": [
+    {
+      "user": "admin",
+      "password": "123456789",
+      "name": "Иван Иванов",
+      "role": "ADMIN"
+    },
+    {
+      "user": "user",
+      "password": "123456789",
+      "name": "Петр Петров",
+      "role": "USER"
+    }
+  ]
+}

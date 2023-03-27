@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { ref } from "vue";
-
 interface Props {
+  modelValue: string | number;
   width?: number;
   placeholder?: string;
   type?: string;
@@ -9,15 +8,18 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const inputValue = ref("");
-const emit = defineEmits(["inputValue"]);
+const updateValue = (event: Event) => {
+  emit("update:modelValue", (event.target as HTMLInputElement).value);
+};
+
+const emit = defineEmits(["update:modelValue"]);
 </script>
 
 <template>
   <div>
     <input
-      v-model="inputValue"
-      @input="emit('inputValue', inputValue)"
+      :value="props.modelValue"
+      @input="updateValue"
       :placeholder="placeholder"
       :type="type"
       :style="{ width: props.width + 'px' }"

@@ -1,5 +1,18 @@
 <script lang="ts" setup>
+import { ref } from "vue";
 import MainBtn from "./MainBtn.vue";
+import { useStore } from "../store/useStore";
+import router from "../router";
+
+const store = useStore();
+const name = ref(store.profileData?.name);
+
+const logOut = () => {
+  store.profileData = null;
+  store.profileOrders = null;
+  store.authorize(false);
+  router.push("/auth");
+};
 </script>
 
 <template>
@@ -14,9 +27,9 @@ import MainBtn from "./MainBtn.vue";
         </div>
       </div>
       <div :class="$style['header_right-group']">
-        <span>Имя Фамилия</span>
+        <span>{{ name }}</span>
 
-        <MainBtn> Выйти </MainBtn>
+        <MainBtn @click="logOut"> Выйти </MainBtn>
       </div>
     </div>
   </div>

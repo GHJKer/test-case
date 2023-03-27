@@ -1,25 +1,50 @@
 <script setup lang="ts">
+import { ref, Ref, computed, onBeforeMount, onMounted } from "vue";
 import CrossSvg from "./svg/CrossSvg.vue";
 import CheckSvg from "./svg/CheckSvg.vue";
+import MainDialogue from "./MainDialogue.vue";
+import { useStore } from "../store/useStore";
+import router from "../router";
+import { deleteRequest, putRequest, requestBase } from "../use/useRequest";
+import { Order } from "../types/general";
 
-let leaders = [
-  {
-    num: 1,
-    name: "Den",
-    address: "Ленина 9",
-    date: "9 мая",
-    status: "готово",
-    comment: "Не опаздывать",
-  },
-  {
-    num: 2,
-    name: "Oleg",
-    address: "Пушкина 2",
-    date: "1 апреля",
-    status: "Новый",
-    comment: "Не кантовать",
-  },
-];
+let store = useStore();
+let isAdmin = computed(() => store.profileData?.role === "ADMIN");
+let orders: Ref<Order[]> = ref([]);
+let isDialogueOpen = ref(false);
+
+const deleteOrderHandler = async (id: number, name: string) => {
+  await deleteRequest(id);
+
+  orders.value = await requestBase(`events?name=${name}`);
+  store.addProfileOrders(orders.value);
+};
+
+const changeHandler = async (order: Order) => {
+  let localOrder = {
+    id: order.id,
+    name: order.name,
+    address: order.address,
+    date: order.date,
+    status: "Выполнен",
+    comment: order.comment,
+  };
+  await putRequest(order.id, localOrder);
+
+  orders.value = await requestBase(`events?name=${order.name}`);
+  store.addProfileOrders(orders.value);
+};
+
+onBeforeMount(() => {
+  if (!store.isLogged) {
+    console.log("not logged");
+    router.push({ path: "/auth" });
+  }
+});
+
+onMounted(() => {
+  orders.value = store.profileOrders ?? [];
+});
 </script>
 
 <template>
@@ -46,49 +71,91 @@ let leaders = [
             <span>Комментарий</span>
           </th>
         </tr>
-        <tr v-for="item in leaders">
-          <td :class="$style['table-td']">
+        <tr v-for="item in orders" :key="item.id">
+          <td
+            :class="[
+              $style['table-td'],
+              { [$style['done']]: item.status === 'Выполнен' },
+            ]"
+          >
             <span>
-              {{ item.num }}
+              {{ item.id }}
             </span>
           </td>
-          <td :class="$style['table-td']">
+          <td
+            :class="[
+              $style['table-td'],
+              { [$style['done']]: item.status === 'Выполнен' },
+            ]"
+          >
             <span>
               {{ item.name }}
             </span>
           </td>
-          <td :class="$style['table-td']">
+          <td
+            :class="[
+              $style['table-td'],
+              { [$style['done']]: item.status === 'Выполнен' },
+            ]"
+          >
             <span>
               {{ item.address }}
             </span>
           </td>
-          <td :class="$style['table-td']">
+          <td
+            :class="[
+              $style['table-td'],
+              { [$style['done']]: item.status === 'Выполнен' },
+            ]"
+          >
             <span>
               {{ item.date }}
             </span>
           </td>
-          <td :class="$style['table-td']">
+          <td
+            :class="[
+              $style['table-td'],
+              { [$style['done']]: item.status === 'Выполнен' },
+            ]"
+          >
             <span>
               {{ item.status }}
             </span>
           </td>
-          <td :class="$style['table-td']">
+          <td
+            :class="[
+              $style['table-td'],
+              { [$style['done']]: item.status === 'Выполнен' },
+            ]"
+          >
             <span>
               {{ item.comment }}
             </span>
           </td>
-          <td>
+          <td v-if="isAdmin">
             <span>
               <div :class="$style['svg-group']">
-                <div :class="$style['svg-container']">
+                <div
+                  v-if="item.status === 'Новый'"
+                  :class="$style['svg-container']"
+                  @click="changeHandler(item)"
+                >
                   <CheckSvg :class="$style['check-svg']" />
                 </div>
-                <div :class="$style['svg-container']">
+                <div
+                  :class="$style['svg-container']"
+                  @click="isDialogueOpen = true"
+                >
                   <CrossSvg :class="$style['cross-svg']" />
                 </div>
               </div>
             </span>
           </td>
+          <MainDialogue
+            v-if="isDialogueOpen"
+            @ok="deleteOrderHandler(item.id, item.name)"
+            @cancel="isDialogueOpen = false"
+          />
         </tr>
       </t-body>
     </table>
@@ -123,6 +190,7 @@ let leaders = [
   display: flex;
   gap: 5px;
   padding-left: 3px;
+  opacity: 1;
 }
 
 .svg-container {
@@ -130,6 +198,7 @@ let leaders = [
   justify-content: center;
   align-items: center;
   border: 1px solid black;
+  cursor: pointer;
 }
 
 .check-svg {
@@ -141,5 +210,9 @@ let leaders = [
   color: rgb(var(--color_black));
   width: 15px;
   transform: rotate(45deg);
+}
+
+.done {
+  opacity: 0.25;
 }
 </style>
