@@ -9,11 +9,12 @@ import router from "../router";
 let store = useStore();
 let userName = ref("");
 let userPassword = ref();
+let showWarning = ref(false);
 
 let getProfile = async () => {
-  const result = await requestBase(`users?name_like=${userName.value}`);
-  if (result.length > 1) {
-    console.log(">2", result);
+  const result = await requestBase(`users?name=${userName.value}`);
+  if (result.length > 1 || !result.length) {
+    showWarning.value = true;
     return;
   }
   if (userPassword.value === result[0].password) {
@@ -21,12 +22,11 @@ let getProfile = async () => {
     store.authorize(true);
 
     const orders = await requestBase(`events?name=${userName.value}`);
-    console.log(orders);
     store.addProfileOrders(orders);
-
+    showWarning.value = false;
     router.push("/main-orders");
   } else {
-    console.log("wrong password");
+    showWarning.value = true;
     return;
   }
 };
@@ -41,6 +41,9 @@ let getProfile = async () => {
         :width="180"
         :placeholder="'password'"
       />
+      <span :class="$style['warning']" v-if="showWarning"
+        >Неверное имя пользователя или пароль</span
+      >
     </div>
     <MainBtn
       :width="'104px'"
@@ -69,6 +72,13 @@ let getProfile = async () => {
   display: flex;
   flex-direction: column;
   gap: 32px;
+}
+
+.warning {
+  position: absolute;
+  top: 60%;
+  color: rgb(var(--color_red));
+  font-size: 10px;
 }
 
 .btn {

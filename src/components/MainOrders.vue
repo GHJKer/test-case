@@ -37,7 +37,6 @@ const changeHandler = async (order: Order) => {
 
 onBeforeMount(() => {
   if (!store.isLogged) {
-    console.log("not logged");
     router.push({ path: "/auth" });
   }
 });

@@ -8,7 +8,6 @@ let store = useStore();
 
 onBeforeMount(() => {
   if (store.isLogged !== true) {
-    console.log("not logged");
     router.push({ path: "/auth" });
   }
 });
